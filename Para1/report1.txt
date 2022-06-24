@@ -1,0 +1,143 @@
+--------------------------
+
+学籍番号 : 20B30100
+氏名 : 伊藤悠馬
+
+--------------------------
+
+回答1.2 : Buttonクラスの継承関係は次のとおり
+java.lang.Object
+  javafx.scene.Node
+    javafx.scene.Parent
+      javafx.scene.layout.Region
+        javafx.scene.control.Control
+          javafx.scene.control.Labeled
+            javafx.scene.control.ButtonBase
+              javafx.scene.control.Button
+
+
+
+
+
+
+回答1.3 : setOnAction メソッドが定義されているクラスは次のとおり
+javafx.scene.control.ButtonBase
+
+
+
+
+
+
+回答1.4 : handle メソッドが呼ばれる時の引数のクラス含まれている情報は次のとおり
+イベントハンドラが処理できるイベント
+
+
+
+
+
+
+回答1.5 : パッケージcalc内のクラス、インタフェースの継承、実装関係は次のとおり
+ex->継承
+im->インターフェースの実装
+
+Application
+  ex -> Calculator
+
+Executor
+  im -> Executor1
+Application
+  ex -> Executor1
+
+ExecutorBase
+
+
+
+
+回答2.1 : 作成されたclassファイルのディレクトリ位置はそれぞれ次のとおり
+
+Paint.class: bin/para/paint/Paint.class
+
+Calculator.class: bin/para/calc/Calculator.class
+Executor1.class: bin/para/calc/Executor1.class
+Executor.class	: bin/para/calc/Executor.class	
+ExecutorBase.class: bin/para/calc/ExecutorBase.class
+
+
+
+
+回答2.2 : 説明は次のとおり
+javacで-d binと指定することでclassファイルがbin以下に生成されている
+さらにjavaコマンドでパッケージ名、起点のクラス名para.paint.Paintと指定したためbin/para/paintにPaint.classが生成される
+
+Calculator.classについても同様にしてbin/para/calcにCalculator.classが生成される。
+Calculator.javaで指定されているpara.calcパッケージが同じディレクトリに保存されている。
+
+
+
+
+
+
+回答2.3 : 説明は次のとおり
+javacの実行時に--module-pathで../javafx-sdk-18.0.1/libを指定しているためこのディレクトリの直下にimportで指定したクラスがある必要がある。
+
+
+
+
+
+
+回答3.1 : ソースコードの変更を次のように行った
+canvasのマウスドラッグでのイベントハンドラでの処理にスライダーから色情報をとってきて線の色に代入するように変更した。
+この際、スライダーの宣言をハンドラの前へ移動した。
+
+
+
+
+
+回答3.2 : ソースコードの変更を次のように行った
+rgbのスライダーと同様に透明度を操作するslider_opacity、太さを操作するslider_widthを宣言した。
+その後に、canvasのマウスドラッグのイベントハンドラで透明度や太さを描画するメソッドに代入した。
+
+
+
+
+
+回答3.3 : ソースコードの変更を次のように行った
+色のプレビュー機能用の窓のためにRectangleを生成し、HBoxに登録するためにShape型で宣言したrectに格納している。
+色の初期設定を行ったのち、clearとともにHBoxに登録している。
+角スライダーの値変更時のイベントリスナーに値変更時にプレビューの色を変えるように設定している。
+
+
+
+
+
+
+回答3.4 : 機能拡張を次のように行った
+
+追加機能その1：色の反転
+　現在のスライダーの色を反転させた色にする色の反転用ボタンを追加した。
+　色反転用ボタンを押した際に1から各値を引いたものを新しい値とした。
+
+
+
+
+
+
+回答4.1 :
+　実装に工夫した点があれば説明
+  電卓の各キーを一つずつ定義するのではbuttonname[]を定義した意味がないためCalculator.javaの70行目でfor文を回してbuttons[]を定義している。
+  さらにこの部分の定義と+,<ボタンの定義で幅、高さを設定することでレイアウトの崩れを防止している。
+
+
+
+回答4.2 :
+  (イベントハンドラの登録の実装をどう行ったかを説明
+  工夫した点があれば、その説明)
+  buttons[]の各ボタン要素に対してsetOnAction関数にてbuffを通してinputの値を変える設定を行った。
+  <ボタンではbuffに一つ以上の文字が入っていることを確認してから文字を削除している。
+
+
+回答4.3 :
+  49行目で=ボタンにsetOnAction関数でex.operation()に現在のinputの値を渡して、返り値をoutputに入れている。
+
+
+

@@ -1,3 +1,7 @@
+/*
+学籍番号：20B30100
+氏名：伊藤悠馬
+*/
 package para;
 
 import para.graphic.shape.*;
@@ -20,8 +24,8 @@ public class Main06{
                          new Attribute(200, 250, 200, true)));
     }
     ShapeManager sm2;
-    sm2 = sm1;
-    //sm2 = sm1.duplicate();
+    // sm2 = sm1;
+    sm2 = sm1.duplicate();
     ts1 = new Thread(new Runner(t1, sm1, 1));
     ts2 = new Thread(new Runner(t2, sm2, -1));
   }

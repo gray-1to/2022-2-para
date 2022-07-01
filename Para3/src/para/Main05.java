@@ -22,6 +22,7 @@ public class Main05 extends Application{
   final JavaFXCanvasTarget jfc;
   final ShapeManager sm;
   volatile int value;
+  // int value;
 
   public Main05(){
     sm = new ShapeManager();
@@ -31,7 +32,7 @@ public class Main05 extends Application{
         public void run(){
           int j=0;
           while(true){
-            //System.out.println(Thread.currentThread().getName());
+            // System.out.println(Thread.currentThread().getName());
             Garden.setMole(100, 100, 100, value, sm);
             jfc.clear();
             jfc.draw(sm);
@@ -53,7 +54,7 @@ public class Main05 extends Application{
     slider.valueProperty().addListener(
       (ObservableValue<? extends Number> ov,
        Number old_val, Number new_val)->{
-        //System.out.println(Thread.currentThread().getName());
+        // System.out.println(Thread.currentThread().getName());
         value = (int)slider.getValue();
       });
     Scene scene = new Scene(pane);

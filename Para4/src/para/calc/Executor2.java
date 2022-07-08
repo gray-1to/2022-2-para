@@ -1,3 +1,7 @@
+/*
+学籍番号：20B30100
+氏名：伊藤悠馬
+*/
 package para.calc;
 
 import javafx.scene.control.*;
@@ -14,8 +18,9 @@ public class Executor2 extends ExecutorBase implements Executor{
   public void writeState(String state){
     System.err.println(Thread.currentThread().getName());//hint
     System.out.print(state);
-    Platform.runLater(()->{
         label.setText(state);
+    Platform.runLater(()->{
+        // label.setText(state);
         System.err.println(Thread.currentThread().getName());//hint
       });
   }
@@ -49,7 +54,7 @@ public class Executor2 extends ExecutorBase implements Executor{
         isSuccess = onestep();
       }
       // 最終的な結果を表示する（このままだとエラーが発生するので修正が必要）
-      label.setText("<<  "+result+"  >>");
+      // label.setText("<<  "+result+"  >>");
       
       try{
         Thread.sleep(2000);

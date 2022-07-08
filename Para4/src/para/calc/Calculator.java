@@ -69,7 +69,7 @@ public class Calculator extends Application{
         System.out.println("[["+buff.toString()+"]]");
         String mid;
         mid = ex.operation(buff.toString());
-        output.setText(mid);
+        // output.setText(mid);
         buff.delete(0,buff.length());
       });
     buttondel.setOnAction(ev->{

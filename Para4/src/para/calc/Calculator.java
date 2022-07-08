@@ -27,8 +27,8 @@ public class Calculator extends Application{
     input = new Label();
     output = new Label();
     buff = new StringBuilder();
-    ex = new Executor1();
-    //ex = new Executor2(output);
+    // ex = new Executor1();
+    ex = new Executor2(output);
   }
   /** ボタンのラベル */
   final String[] buttonname = {"9","8","7","+",

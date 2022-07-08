@@ -35,6 +35,7 @@ abstract public class ExecutorBase{
    * @return 1ステップが処理できれば true 処理対象の文字列の文法誤りで処理できなればfalse
    */
   protected boolean onestep(){// throws InterruptedException{
+    System.out.println("onestep is called");
     if(s.hasNext("\\-?+\\d++\\.?+\\d*")){
       float ret = Float.parseFloat(s.next("\\-?+\\d++\\.?+\\d*"));
       stack.push(ret);
@@ -78,6 +79,7 @@ abstract public class ExecutorBase{
   }
 
   public void showProgress(String op){
+    System.out.println("showProgress is called");
     Stream<Float> st = stack.stream();
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     PrintStream ps = new PrintStream(bos); 

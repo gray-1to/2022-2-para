@@ -18,9 +18,8 @@ public class Executor2 extends ExecutorBase implements Executor{
   public void writeState(String state){
     System.err.println(Thread.currentThread().getName());//hint
     System.out.print(state);
-        label.setText(state);
     Platform.runLater(()->{
-        // label.setText(state);
+        label.setText(state);
         System.err.println(Thread.currentThread().getName());//hint
       });
   }

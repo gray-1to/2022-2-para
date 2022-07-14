@@ -43,6 +43,7 @@ public class Main08{
       server_target.clear();
       client_target.clear();
       //クライアント側の表示更新
+      // //クライアント側の動画情報の取得・保存
       new Thread(() -> {
         while(true){
           parser.parse(new Scanner(text_from_server));
@@ -55,7 +56,6 @@ public class Main08{
           }
         }
       }).start();
-      // //クライアント側の動画情報の取得・保存
 
       while(true){
         server_target.draw(to_server_sm);

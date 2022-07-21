@@ -16,6 +16,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.Control;
+import javafx.scene.layout.*;
 import javafx.event.EventHandler;
 //import javafx.scene.paint.Color; // not Color in javafx module
 import java.awt.Color;
@@ -25,6 +29,9 @@ import java.awt.Graphics;
 
 import javax.imageio.*;
 import java.io.*;
+
+
+import javafx.geometry.Pos;
 
 public class JavaFXTarget implements Target{
   int WIDTH;
@@ -36,6 +43,7 @@ public class JavaFXTarget implements Target{
   String title;
   Group root;
   Scene scene;
+  // Stage stage = new Stage();
   Stage stage;
   WritableImage image;
 
@@ -66,6 +74,22 @@ public class JavaFXTarget implements Target{
     scene = new Scene(root, width, height);//, Color.BLACK);
     root.getChildren().add(canvas);
     buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    graphics = buffer.getGraphics();
+    graphics.setColor(Color.BLACK);
+  }  
+
+  public JavaFXTarget(String title, int canvas_width, int canvas_height, int scene_width, int scene_height){
+    WIDTH = canvas_width;
+    HEIGHT = canvas_height;
+    this.title = title;
+    counter = new AtomicInteger();
+    canvas = new JavaFXCanvasTarget(canvas_width, canvas_height);
+    image = new WritableImage(canvas_width, canvas_height);
+    root = new Group();
+    // scene = new Scene(root, scene_width, scene_width);//, Color.BLACK)
+    scene = new Scene(root, scene_width, scene_height);
+    root.getChildren().add(canvas);
+    buffer = new BufferedImage(canvas_width, canvas_height, BufferedImage.TYPE_INT_RGB);
     graphics = buffer.getGraphics();
     graphics.setColor(Color.BLACK);
   }
@@ -116,13 +140,38 @@ public class JavaFXTarget implements Target{
                 System.exit(0);
               };
             });
-          stage.show();
+            stage.show();
+        }
+      });
+  }
+  public void show(){
+    Platform.runLater(new Runnable(){
+        public void run(){
+          stage.setTitle(title);
+          stage.setOnCloseRequest(ev->{//ev.consume();
+              System.exit(0);
+            });
+          stage.setScene(scene);
+          scene.setOnKeyPressed(ev->{
+              if(ev.getCode()== KeyCode.ESCAPE){
+                System.exit(0);
+              };
+            });
+            stage.show();
         }
       });
   }
 
+  public void addContents(Region content){
+    root.getChildren().add(content);
+  }
+
   public void addKeyPressHandler(EventHandler<? super KeyEvent> hander){
     scene.addEventHandler(KeyEvent.KEY_PRESSED, hander);
+  }
+
+  public void addKeyTypedHandler(EventHandler<? super KeyEvent> hander){
+    scene.addEventHandler(KeyEvent.KEY_TYPED, hander);
   }
   
   public void addKeyReleasedHandler(EventHandler<? super KeyEvent> hander){

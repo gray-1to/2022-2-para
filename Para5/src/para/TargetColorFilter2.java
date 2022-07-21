@@ -1,3 +1,5 @@
+// 学籍番号：20B30100
+// 氏名：伊藤悠馬
 package para;
 
 import para.graphic.shape.*;
@@ -38,7 +40,6 @@ public class TargetColorFilter2 extends TargetColorFilter {
     int labels[] = new int[Camera.WIDTH * Camera.HEIGHT];
     // 1番目のStream処理
     IntStream.range(0, Camera.WIDTH * Camera.HEIGHT)
-        .parallel()
         .forEach(n -> {
           int min = 600000;
           int label = 0;

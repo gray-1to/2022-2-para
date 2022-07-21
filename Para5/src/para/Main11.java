@@ -1,3 +1,5 @@
+// 学籍番号：20B30100
+// 氏名：伊藤悠馬
 package para;
 
 import java.util.Scanner;
@@ -49,33 +51,14 @@ public class Main11 {
     wall = new OrderedShapeManager();
     scoreboard = new OrderedShapeManager();
     deadwall = new OrderedShapeManager();
-    // // jf = new JavaFXTarget("Main11", 1840, 960);
     ps = new MainParser(jf, sm);
-    // ps.parse(new Scanner(data));
-    // Attribute wallattr = new Attribute(250, 230, 200, true, 0, 0, 0);
-    // wall.add(new Rectangle(0, 0, 0, 1840, 20, wallattr));
-    // wall.add(new Rectangle(1, 0, 0, 20, 960, wallattr));
-    // wall.add(new Rectangle(2, 1820, 0, 20, 960, wallattr));
-    // deadwall.add(new Rectangle(3, 0, 940, 1840, 20, wallattr));
-    // // 操作対象のバー
-    // // wall.add(new Rectangle(10,790, 800, 240, 20, wallattr));
-    // bpos = 150;
-    // pos = new Vec2(200, 250);
-    // // vel = new Vec2(16 * 10, 61 * 10);
-    // vel = new Vec2(4, 61 / 4.0f);
   }
 
   public void init(){
-    // sm = new OrderedShapeManager();
-    // wall = new OrderedShapeManager();
-    // scoreboard = new OrderedShapeManager();
-    // deadwall = new OrderedShapeManager();
     sm.clear();
     wall.clear();
     scoreboard.clear();
     deadwall.clear();
-    // jf = new JavaFXTarget("Main11", 1840, 960);
-    // ps = new MainParser(jf, sm);
     ps.parse(new Scanner(data));
 
     wall.add(new Rectangle(0, 0, 0, 1840, 20, wallattr));
@@ -203,7 +186,6 @@ public class Main11 {
     thread.start();
     new Thread(() -> {
       while (true) {
-        // System.out.println(score);
         for (int i = 0; i < 5; i++) {
           scoreboard.remove(20 * i);
         }

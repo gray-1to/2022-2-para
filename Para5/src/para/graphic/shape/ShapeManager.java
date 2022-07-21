@@ -1,3 +1,5 @@
+// 学籍番号：20B30100
+// 氏名：伊藤悠馬
 package para.graphic.shape;
 import java.util.*;
 import java.util.stream.*;

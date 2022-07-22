@@ -1,3 +1,5 @@
+// 学籍番号：20B30100
+// 氏名：伊藤悠馬
 package para.graphic.target;
 import para.graphic.shape.Attribute;
 import para.graphic.shape.ShapeManager;
@@ -105,6 +107,11 @@ public class JavaFXCanvasTarget extends Canvas implements Target{
   public void addKeyPressHandler(EventHandler<? super KeyEvent> hander){
     setFocusTraversable(true);
     addEventHandler(KeyEvent.KEY_PRESSED, hander);
+  }
+
+  public void addKeyTypedHandler(EventHandler<? super KeyEvent> hander){
+    setFocusTraversable(true);
+    addEventHandler(KeyEvent.KEY_TYPED, hander);
   }
 
   public void addKeyReleasedHandler(EventHandler<? super KeyEvent> hander){

@@ -37,6 +37,8 @@ public class TargetColorFilter2 extends TargetColorFilter{
     }
     //1番目のStream処理
     IntStream.range(0,Camera.WIDTH*Camera.HEIGHT)
+      .parallel()
+      .unordered()
       .forEach(n->{int min=600000;
           int label=0;
           for(int j=0;j<sample.length;j++){
@@ -49,7 +51,10 @@ public class TargetColorFilter2 extends TargetColorFilter{
           ave.get(label).add(inimage[n]);}
         );
     //2番目のStream処理
-    IntStream.range(0,SCOUNT3).forEach(n->{
+    IntStream.range(0,SCOUNT3)
+      .parallel()
+      .unordered()
+      .forEach(n->{
         RGB rgb = ave.get(n);
         sample[n] = rgb.get();
       });
@@ -57,6 +62,8 @@ public class TargetColorFilter2 extends TargetColorFilter{
     //3番目のStream処理
     Map<Integer,Integer> classified =
       IntStream.range(0,Camera.WIDTH*Camera.HEIGHT)
+      .parallel()
+      .unordered()
                .boxed()
                .collect(Collectors.toMap(n->n,
                    n->{int min=600000;

@@ -71,7 +71,7 @@ public class Main11{
           long count=-1;
           while(true){
             count++;
-            if(count==100){
+            if(count==1000){
               long endTimeMS = System.currentTimeMillis();
               System.out.println((endTimeMS-startTimeMS) + "msec");
               System.exit(0);

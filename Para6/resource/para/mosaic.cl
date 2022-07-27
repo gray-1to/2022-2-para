@@ -1,3 +1,5 @@
+// student_num:20B30100
+// name:Yuma Ito
 #pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
 
 // OpenCL Kernel Function
@@ -41,21 +43,20 @@ __kernel void Mosaic(const int width, const int height,
    * calculate average color in one block area 
    */ 
 
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
+  int i = get_global_id(0);
+  int gi = get_group_id(0);
+  int li = get_local_id(0); 
+  int ls = get_local_size(0);
+/*
+  for(int s=1;s<ls;s*=2){
+    if((li % (2*s*3) == 0) && (li/(3*8) % (2*s) == 0)){
+      ldata[li] = (ldata[li] + ldata[li + s*3] + ldata[li + 8*s*3] + ldata[li + 8*s*3 + s*3])/4;
+      ldata[li+1] = (ldata[li + 1] + ldata[li + s*3 + 1] + ldata[li + 8*s*3 + 1] + ldata[li + 8*s*3 + s*3 +1])/4;
+      ldata[li+2] = (ldata[li + 2] + ldata[li + s*3 + 2] + ldata[li + 8*s*3 + 2] + ldata[li + 8*s*3 + s*3 +2])/4;
+    }
+    barrier(CLK_LOCAL_MEM_FENCE);
+  }
+*/
   
   /**
    * fill one color in a block area

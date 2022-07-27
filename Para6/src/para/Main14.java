@@ -24,6 +24,7 @@ public class Main14 extends Application{
   final Target target;
   final ShapeManager sm;
   volatile int value;
+  volatile int circle_x;
 
   public Main14(){
     sm = new OrderedShapeManager();
@@ -35,6 +36,7 @@ public class Main14 extends Application{
     target.init();
     target.clear();
     sm.add(new Camera(0,20,20));
+    sm.add(new Circle(1, circle_x, 100 ,10));
     thread = new Thread(new Runnable(){
         public void run(){
           while(true){

@@ -1,3 +1,5 @@
+// 学籍番号：20B30100
+// 氏名：伊藤悠馬
 package para;
 
 import javafx.application.Application;
@@ -15,60 +17,91 @@ import para.graphic.target.*;
 import para.graphic.shape.*;
 import para.graphic.parser.*;
 
-/** スライダにより残像効果が変わるプログラム
+
+/**
+ * スライダにより残像効果が変わるプログラム
  */
-public class Main14 extends Application{
+public class Main14 extends Application {
   final Thread thread;
   final JavaFXCanvasTarget jfc;
   final TargetDelayFilter filter;
   final Target target;
   final ShapeManager sm;
   volatile int value;
-  volatile int circle_x;
+  Slider slider = new Slider(0, 1.0, 0.2);
+  volatile float slider_value = 0.2f;
+  final ShapeManager after_circle_sm;
+  // volatile int circle_x;
 
-  public Main14(){
+  public Main14() {
     sm = new OrderedShapeManager();
-    jfc = new JavaFXCanvasTarget(360,280);
+    jfc = new JavaFXCanvasTarget(360, 280);
+    after_circle_sm = new OrderedShapeManager();
 
-    //filter = new TargetDelayFilter(jfc, "donothing.cl", "DoNothing");
+    // filter = new TargetDelayFilter(jfc, "donothing.cl", "DoNothing");
     filter = new TargetDelayFilter(jfc, "delay.cl", "Delay");
     target = new TargetRecorder("recorddelay", filter);
     target.init();
     target.clear();
-    sm.add(new Camera(0,20,20));
-    sm.add(new Circle(1, circle_x, 100 ,10));
-    thread = new Thread(new Runnable(){
-        public void run(){
-          while(true){
-            //System.out.println(Thread.currentThread().getName());
+    sm.add(new Camera(0, 20, 20));
+    thread = new Thread(new Runnable() {
+      public void run() {
+        while (true) {
+          // System.out.println(Thread.currentThread().getName());
+
+          synchronized(slider){
+            sm.put(new Circle(30, (int)(slider.getValue()*320), 200, 10, new Attribute(255, 0, 0, true)));
             target.draw(sm);
-            target.flush();
-            try{
-              Thread.sleep(80);
-            }catch(InterruptedException e){
-            }
+            sm.put(new Circle(31, (int)(slider.getValue()*320), 200, 10, new Attribute(0, 0, 255, true)));
+            target.draw(sm);            
+          }
+
+          target.flush();
+          try {
+            Thread.sleep(80);
+          } catch (InterruptedException e) {
           }
         }
-      });
+      }
+    });
   }
 
-  public void start(Stage stage){
+  public void start(Stage stage) {
     BorderPane pane = new BorderPane();
     pane.setCenter(jfc);
-    Slider slider = new Slider(0, 1.0, 0.2);
     pane.setBottom(slider);
     slider.valueProperty().addListener(
-      (ObservableValue<? extends Number> ov,
-       Number old_val, Number new_val)->{
-        //System.out.println(Thread.currentThread().getName());
-        filter.setParameter((float)slider.getValue());
-      });
+        (ObservableValue<? extends Number> ov,
+            Number old_val, Number new_val) -> {
+          // System.out.println(Thread.currentThread().getName());
+          slider_value = (float) slider.getValue();
+          filter.setParameter(slider_value);
+        });
     Scene scene = new Scene(pane);
     stage.setTitle("DelaySlider");
     stage.setScene(scene);
-    stage.setOnCloseRequest(ev->{System.exit(0);});
+    stage.setOnCloseRequest(ev -> {
+      System.exit(0);
+    });
     stage.sizeToScene();
     stage.show();
     thread.start();
+    // new Thread(new Runnable() {
+    //   public void run() {
+    //     while (true) {
+    //       // synchronized(slider){
+    //         if(slider.getValue()==1){
+    //           slider.setValue(0);
+    //         }else{
+    //           slider.setValue(slider.getValue()+0.1);
+    //         }
+    //       // }
+    //       try {
+    //         Thread.sleep(80);
+    //       } catch (InterruptedException e) {
+    //       }
+    //     }
+    //   }
+    // }).start();
   }
 }

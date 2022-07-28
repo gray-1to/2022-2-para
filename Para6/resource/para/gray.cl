@@ -1,3 +1,5 @@
+// student_num:20B30100
+// name:Yuma Ito
 #pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
 
 // OpenCL Kernel Function

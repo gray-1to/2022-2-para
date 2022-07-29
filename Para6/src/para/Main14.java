@@ -46,19 +46,22 @@ public class Main14 extends Application {
     sm.add(new Camera(0, 20, 20));
     thread = new Thread(new Runnable() {
       public void run() {
+        int i=0;
         while (true) {
           // System.out.println(Thread.currentThread().getName());
 
-          synchronized(slider){
-            sm.put(new Circle(30, (int)(slider.getValue()*320), 200, 10, new Attribute(255, 0, 0, true)));
+          // synchronized(slider){
+            // sm.put(new Circle(30, (int)(slider.getValue()*320), 200, 60, new Attribute(255, 0, 0, true)));
+            sm.put(new Circle(30, i, 200, 60, new Attribute(255, 0, 0, true)));
+            i=(i+10)%320;
             target.draw(sm);
-            sm.put(new Circle(31, (int)(slider.getValue()*320), 200, 10, new Attribute(0, 0, 255, true)));
-            target.draw(sm);            
-          }
+            // sm.put(new Circle(31, (int)(slider.getValue()*320), 200, 60, new Attribute(0, 0, 255, true)));
+            // target.draw(sm);            
+          // }
 
           target.flush();
           try {
-            Thread.sleep(80);
+            Thread.sleep(1);
           } catch (InterruptedException e) {
           }
         }
@@ -86,22 +89,5 @@ public class Main14 extends Application {
     stage.sizeToScene();
     stage.show();
     thread.start();
-    // new Thread(new Runnable() {
-    //   public void run() {
-    //     while (true) {
-    //       // synchronized(slider){
-    //         if(slider.getValue()==1){
-    //           slider.setValue(0);
-    //         }else{
-    //           slider.setValue(slider.getValue()+0.1);
-    //         }
-    //       // }
-    //       try {
-    //         Thread.sleep(80);
-    //       } catch (InterruptedException e) {
-    //       }
-    //     }
-    //   }
-    // }).start();
   }
 }

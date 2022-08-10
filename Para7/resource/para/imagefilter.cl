@@ -172,11 +172,11 @@ __kernel void Filter2(const int width, const int height,
   outb[oadd  ]= bound(filter2(in,width,height,lx,ly,0)*samp+128);
   outb[oadd+1]= bound(filter2(in,width,height,lx,ly,1)*samp+128);
   outb[oadd+2]= bound(filter2(in,width,height,lx,ly,2)*samp+128);
-/*
+
   outb[oadd  ]= bound(in[add]+filter2(in,width,height,lx,ly,0)*samp);
   outb[oadd+1]= bound(in[add+1]+filter2(in,width,height,lx,ly,1)*samp);
   outb[oadd+2]= bound(in[add+2]+filter2(in,width,height,lx,ly,2)*samp);
-*/
+
   outb[oadd+3]= 255;
 }
 

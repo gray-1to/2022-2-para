@@ -56,6 +56,7 @@ public class Game04 extends GameFrame{
     }
     
     /* ユーザ入力をサーバに送信するスレッド */
+    // System.out.println("1:"+Thread.currentThread().getName());// print 3-3
     thread = new Thread(()->{
         int x=150;
         Attribute attr = new Attribute(200,128,128);
@@ -81,6 +82,7 @@ public class Game04 extends GameFrame{
 
     /* 受信したデータを画面に出力するスレッド */
     Thread thread2 = new Thread(()->{
+      // System.out.println("2:"+Thread.currentThread().getName());// print 3-3
         GameMainParser parser = new GameMainParser(this, outputside, osm);
         BufferedReader br = new BufferedReader(new InputStreamReader(istream));
         parser.parse(new Scanner(istream));//loop

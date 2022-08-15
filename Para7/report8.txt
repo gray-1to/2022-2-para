@@ -35,9 +35,9 @@
 
 
 3.3)
-空欄A:
-空欄B:
-空欄C:
+空欄A:thread
+空欄B:JavaFX Application Thread
+空欄C:Thread-6
 
 スレッドセーフで（ある | ない)
 スレッドセーフであると考える理由

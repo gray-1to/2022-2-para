@@ -1,5 +1,3 @@
-//学籍番号:20B30100
-//氏名:伊藤悠馬
 package para.game;
 
 import java.net.*;
@@ -24,8 +22,6 @@ public class GameServerFrame extends Thread{
   private final int maxconnection;
   private int users;
   private ServerSocket ss=null;
-
-  private boolean game_enable = false;
   
   public GameServerFrame(int maxconnection){
     this.maxconnection = maxconnection;
@@ -52,20 +48,15 @@ public class GameServerFrame extends Thread{
   
   private void loop(){
     while(true){
-      System.out.println(users);
       Socket s;
       synchronized(this){
-        users++;
-        if(users>2){
-          game_enable = true;
-        }
-        while(maxconnection<users){ //ckeck why needed?
+        while((maxconnection-1)<users){ //ckeck why needed?
           try{
             wait();
           }catch(InterruptedException ex){
           }
         }
-        game_enable = false;
+        users++;
       }
       try{
         s = ss.accept();
@@ -107,13 +98,5 @@ public class GameServerFrame extends Thread{
       }
     }
     notifyAll();
-  }
-
-  public synchronized int getUserCounter(){
-    return users;
-  }
-
-  public synchronized boolean getGameEnable(){
-    return  game_enable;
   }
 }

@@ -64,35 +64,27 @@ public class GameServer01{
 
     int gs=0;
     while(true){
-      System.out.println(gsf.getGameEnable());
-      System.out.println(gsf.getUserCounter());
-      if(gsf.getGameEnable()){
-        gs = (gs+1)%350;
-        GameInputThread git = gsf.queue.poll();
-        if(git != null){
-          int id = git.getUserID();
-          init(id);
-          startReceiver(git);
-        }
-        try{
-          Thread.sleep(100);
-        }catch(InterruptedException ex){
-        }
-        for(int i=0;i<MAXCONNECTION;i++){
-          GameTextTarget out = gsf.getUserOutput(i);
-          if(out != null){
-            calcForOneUser(i);
-            ballandscore[i].put(new Circle(i*10000+1, (int)pos[i].data[0],
-                                  (int)pos[i].data[1], 5, ballattr));
-            putScore(i,score[i]);
-            out.gamerstate(gs); //Gamerの状態をクライアントに伝える
-            distributeOutput(out);
-          }
-        }
+      gs = (gs+1)%350;
+      GameInputThread git = gsf.queue.poll();
+      if(git != null){
+        int id = git.getUserID();
+        init(id);
+        startReceiver(git);
       }
       try{
         Thread.sleep(100);
       }catch(InterruptedException ex){
+      }
+      for(int i=0;i<MAXCONNECTION;i++){
+        GameTextTarget out = gsf.getUserOutput(i);
+        if(out != null){
+          calcForOneUser(i);
+          ballandscore[i].put(new Circle(i*10000+1, (int)pos[i].data[0],
+                                 (int)pos[i].data[1], 5, ballattr));
+          putScore(i,score[i]);
+          out.gamerstate(gs); //Gamerの状態をクライアントに伝える
+          distributeOutput(out);
+        }
       }
     }
   }

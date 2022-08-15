@@ -27,6 +27,7 @@ public class GameServer01{
   final GameServerFrame gsf;
   final ShapeManager[] userinput;
   final ShapeManager[] wall;
+  final ShapeManager[] deadwall;
   final ShapeManager[] blocks;
   final ShapeManager[] ballandscore;
   final Vec2[] pos;
@@ -34,11 +35,14 @@ public class GameServer01{
   final int[] score;
   final CollisionChecker checker;
 
+  private boolean finish = false;
+
   private GameServer01(){
     checker = new CollisionChecker();
     gsf = new GameServerFrame(MAXCONNECTION);
     userinput = new ShapeManager[MAXCONNECTION];
     wall = new OrderedShapeManager[MAXCONNECTION];
+    deadwall = new OrderedShapeManager[MAXCONNECTION];
     blocks = new OrderedShapeManager[MAXCONNECTION];
     ballandscore = new ShapeManager[MAXCONNECTION];
     pos = new Vec2[MAXCONNECTION];
@@ -48,6 +52,7 @@ public class GameServer01{
       userinput[i] = new ShapeManager();
       ballandscore[i] = new ShapeManager();
       wall[i] = new OrderedShapeManager();
+      deadwall[i] = new OrderedShapeManager();
       blocks[i] = new OrderedShapeManager();
       pos[i] = new Vec2(i*350+150,200);
       vel[i] = new Vec2(0,0);
@@ -64,8 +69,9 @@ public class GameServer01{
 
     int gs=0;
     while(true){
-      System.out.println(gsf.getGameEnable());
-      System.out.println(gsf.getUserCounter());
+      // System.out.println(gsf.getGameEnable());
+      // System.out.println(gsf.getUserCounter());
+      System.out.println(finish);
       if(gsf.getGameEnable()){
         gs = (gs+1)%350;
         GameInputThread git = gsf.queue.poll();
@@ -89,6 +95,10 @@ public class GameServer01{
             distributeOutput(out);
           }
         }
+        if(finish){
+          gsf.finish();
+          finish = false;
+        }
       }
       try{
         Thread.sleep(100);
@@ -101,7 +111,7 @@ public class GameServer01{
     int id = git.getUserID();
     git.init(new TranslateTarget(userinput[id],
                     new TranslationRule(id*10000,new Vec2(id*350,0))),
-             new ShapeManager[]{userinput[id],wall[id],
+             new ShapeManager[]{userinput[id],wall[id],deadwall[id],
                                 blocks[id],ballandscore[id]}
              );
     git.start();
@@ -111,7 +121,8 @@ public class GameServer01{
     wall[id].add(new Rectangle(id*10000+5, id*350+0, 0, 320, 20, wallattr));
     wall[id].add(new Rectangle(id*10000+6, id*350+0, 0, 20, 300, wallattr));
     wall[id].add(new Rectangle(id*10000+7, id*350+300,0, 20, 300, wallattr));
-    wall[id].add(new Rectangle(id*10000+8, id*350+0,281, 320, 20, wallattr));
+    // wall[id].add(new Rectangle(id*10000+8, id*350+0,281, 320, 20, wallattr));
+    deadwall[id].add(new Rectangle(id*10000+8, id*350+0,281, 320, 20, wallattr));
     IntStream.range(0,33*20).forEach(n->{
         int x = n%33;
         int y = n/33;
@@ -141,6 +152,7 @@ public class GameServer01{
       Shape b=checker.check(userinput[id], tmpbpos, tmpbvel, btime);
       Shape s=checker.check(blocks[id], tmpspos, tmpsvel, stime);
       Shape w=checker.check(wall[id], tmpwpos, tmpwvel, wtime);
+      Shape deadw=checker.check(deadwall[id], tmpwpos, tmpwvel, wtime);
       if( b != null && 
           (s == null || stime[0]<btime[0]) &&
           (w == null || wtime[0]<btime[0])){
@@ -157,6 +169,8 @@ public class GameServer01{
         pos[id] = tmpwpos;
         vel[id] = tmpwvel;
         time = wtime[0];
+      }else if(deadw != null){
+        finish = true;
       }else{
         pos[id] = MathUtil.plus(pos[id], MathUtil.times(vel[id],time));
         time = 0;
@@ -179,6 +193,7 @@ public class GameServer01{
     for(int i=0;i<MAXCONNECTION;i++){
       if(gsf.getUserOutput(i)!=null){
         out.draw(wall[i]);
+        out.draw(deadwall[i]);
         out.draw(blocks[i]);
         out.draw(userinput[i]);
         out.draw(ballandscore[i]);

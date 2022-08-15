@@ -116,4 +116,12 @@ public class GameServerFrame extends Thread{
   public synchronized boolean getGameEnable(){
     return  game_enable;
   }
+
+  public synchronized void finish(){
+    for(int i=0;i<maxconnection;i++){
+      if(useroutput[i]!=null){
+        useroutput[i].finish();
+      }
+    }
+  }
 }

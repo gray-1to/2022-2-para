@@ -26,6 +26,7 @@ public class GameServerFrame extends Thread{
   private ServerSocket ss=null;
 
   private boolean game_enable = false;
+  private boolean from_first_thread = true;
   
   public GameServerFrame(int maxconnection){
     this.maxconnection = maxconnection;
@@ -54,18 +55,27 @@ public class GameServerFrame extends Thread{
     while(true){
       System.out.println(users);
       Socket s;
+      // synchronized(this){
+      //   users++;
+      //   if(users>2){
+      //     game_enable = true;
+      //   }
+      //   while(maxconnection<users){ //ckeck why needed?
+      //     try{
+      //       wait();
+      //     }catch(InterruptedException ex){
+      //     }
+      //   }
+      //   game_enable = false;
+      // }
       synchronized(this){
-        users++;
-        if(users>2){
-          game_enable = true;
-        }
-        while(maxconnection<users){ //ckeck why needed?
+        while((maxconnection-1)<users){ //ckeck why needed?
           try{
             wait();
           }catch(InterruptedException ex){
           }
         }
-        game_enable = false;
+        users++;
       }
       try{
         s = ss.accept();
@@ -76,7 +86,18 @@ public class GameServerFrame extends Thread{
           InputStream is = s.getInputStream();
           GameInputThread th = new GameInputThread(is, id, this);
           array.add(th);
-          queue.add(th);
+          if(users == 1){
+            from_first_thread = true;
+          }
+          if(users == 2){
+            if (from_first_thread) {
+              queue.add(array.get(0));
+            }
+            queue.add(th);
+            from_first_thread = false;
+          }else if(users > 2){
+            queue.add(th);
+          }
         }
       }catch(IOException ex){
         System.err.print(ex);

@@ -71,10 +71,11 @@ public class GameServer01{
     while(true){
       // System.out.println(gsf.getGameEnable());
       // System.out.println(gsf.getUserCounter());
-      System.out.println(finish);
-      if(gsf.getGameEnable()){
+      // System.out.println(finish);
+      // if(gsf.getGameEnable()){
         gs = (gs+1)%350;
         GameInputThread git = gsf.queue.poll();
+
         if(git != null){
           int id = git.getUserID();
           init(id);
@@ -93,17 +94,25 @@ public class GameServer01{
             putScore(i,score[i]);
             out.gamerstate(gs); //Gamerの状態をクライアントに伝える
             distributeOutput(out);
+          }else{
+            userinput[i] = new ShapeManager();
+            ballandscore[i] = new ShapeManager();
+            wall[i] = new OrderedShapeManager();
+            deadwall[i] = new OrderedShapeManager();
+            blocks[i] = new OrderedShapeManager();
+            pos[i] = new Vec2(i*350+150,200);
+            vel[i] = new Vec2(0,0);
           }
         }
         if(finish){
           gsf.finish();
           finish = false;
         }
-      }
-      try{
-        Thread.sleep(100);
-      }catch(InterruptedException ex){
-      }
+      // }
+      // try{
+      //   Thread.sleep(100);
+      // }catch(InterruptedException ex){
+      // }
     }
   }
     
@@ -129,7 +138,8 @@ public class GameServer01{
         blocks[id].add(new Rectangle(id*10000+n,id*350+30+x*8,30+y*8,6,6,
                              new Attribute(250,100,250,true,0,0,0)));
       });
-    pos[id] = new Vec2(id*350+150,200);
+    // pos[id] = new Vec2(id*350+150,200);
+    pos[id] = new Vec2(id*350+150,150);
     vel[id] = new Vec2(4,-12);
     score[id] = 0;
   }

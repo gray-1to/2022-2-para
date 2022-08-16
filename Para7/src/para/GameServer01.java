@@ -1,6 +1,7 @@
 package para;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 import para.graphic.shape.Rectangle;
@@ -35,7 +36,8 @@ public class GameServer01{
   final int[] score;
   final CollisionChecker checker;
 
-  private boolean finish = false;
+  private volatile boolean all_game_finish = false;
+  private volatile boolean[] each_game_finish = new boolean[MAXCONNECTION];
 
   private GameServer01(){
     checker = new CollisionChecker();
@@ -56,6 +58,7 @@ public class GameServer01{
       blocks[i] = new OrderedShapeManager();
       pos[i] = new Vec2(i*350+150,200);
       vel[i] = new Vec2(0,0);
+      each_game_finish[i] = false;
     }
   }
 
@@ -95,6 +98,7 @@ public class GameServer01{
             out.gamerstate(gs); //Gamerの状態をクライアントに伝える
             distributeOutput(out);
           }else{
+            //終了後の初期化処理
             userinput[i] = new ShapeManager();
             ballandscore[i] = new ShapeManager();
             wall[i] = new OrderedShapeManager();
@@ -102,17 +106,31 @@ public class GameServer01{
             blocks[i] = new OrderedShapeManager();
             pos[i] = new Vec2(i*350+150,200);
             vel[i] = new Vec2(0,0);
+            each_game_finish[i] = false;
           }
         }
-        if(finish){
-          gsf.finish();
-          finish = false;
+        //全員が終了したかの判定
+        all_game_finish = true;
+        for(int i=0;i<MAXCONNECTION;i++){
+          if(!each_game_finish[i]){
+            all_game_finish = false;
+          }
         }
-      // }
-      // try{
-      //   Thread.sleep(100);
-      // }catch(InterruptedException ex){
-      // }
+        // 全員終了時の処理
+        if(all_game_finish){
+            int min_id = -1, min_score = 1000;
+            for(int i=0;i<MAXCONNECTION;i++){
+              if(score[i] < min_score){
+                min_score = score[i];
+                min_id = i;
+              }
+            }
+            gsf.finish(min_id);
+            for(int i=0;i<MAXCONNECTION;i++){
+              each_game_finish[i] = false;
+            }
+            all_game_finish = false;
+        }
     }
   }
     
@@ -168,6 +186,11 @@ public class GameServer01{
           (w == null || wtime[0]<btime[0])){
         pos[id] = tmpbpos;
         vel[id] = tmpbvel;
+        //ボードの反射を乱数に
+        float v_length = vel[id].length();
+        double rand_rad = Math.toRadians(Math.random()*120-60);
+        vel[id] = new Vec2((float)(v_length*Math.cos(rand_rad)),
+                           (float)(v_length*Math.sin(rand_rad)));
         time = btime[0];
       }else if(s != null){
         blocks[id].remove(s); // block hit!
@@ -180,7 +203,14 @@ public class GameServer01{
         vel[id] = tmpwvel;
         time = wtime[0];
       }else if(deadw != null){
-        finish = true;
+        //得点を100消費してやり直し
+        if(score[id]>=100){
+          score[id] -= 100;
+          vel[id] = new Vec2(vel[id].data[0],-vel[id].data[1]);
+        }else{
+          each_game_finish[id] = true;
+          vel[id] = new Vec2(0,0);
+        }
       }else{
         pos[id] = MathUtil.plus(pos[id], MathUtil.times(vel[id],time));
         time = 0;
@@ -191,8 +221,10 @@ public class GameServer01{
   private void putScore(int id, int score){
     int one = score%10;
     int ten = (score/10)%10;
+    int hundred = (score/100)%10;
     ballandscore[id].put(new Digit(id*10000+2,id*300+250,330,20,one,scoreattr));
     ballandscore[id].put(new Digit(id*10000+3,id*300+200,330,20,ten,scoreattr));
+    ballandscore[id].put(new Digit(id*10000+4,id*300+150,330,20,hundred,scoreattr));
   }
   
   private void distributeOutput(GameTextTarget out){

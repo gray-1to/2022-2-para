@@ -138,11 +138,22 @@ public class GameServerFrame extends Thread{
     return  game_enable;
   }
 
-  public synchronized void finish(){
-    for(int i=0;i<maxconnection;i++){
-      if(useroutput[i]!=null){
-        useroutput[i].finish();
+  public synchronized void finish(int loser_id){
+    useroutput[loser_id].drawCameraFilter(100);
+    new Thread(()->{
+      try{
+        Thread.sleep(10000);
+      }catch(InterruptedException ex){
       }
-    }
+      for(int i=0;i<maxconnection;i++){
+        if(useroutput[i]!=null){
+          useroutput[i].finish();
+        }
+      }
+    }).start();
+  }
+
+  public synchronized void filterChange(int loser_id){
+    useroutput[loser_id].drawCameraFilter(100);
   }
 }

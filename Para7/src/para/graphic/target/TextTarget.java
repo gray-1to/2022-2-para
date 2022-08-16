@@ -197,6 +197,13 @@ public class TextTarget implements Target{
   }
 
   /** 
+   *  カメラのフィルターの変更を文字出力する
+   */
+  public void drawCameraFilter(int filter_id){
+    pstream.println("game camera_change "+filter_id);
+  }
+
+  /** 
    *  数字の情報を文字出力する
    */
   public void drawDigit(int id, int x, int y, int r, int number,Attribute attr){

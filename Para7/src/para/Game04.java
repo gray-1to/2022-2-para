@@ -1,3 +1,5 @@
+//学籍番号:20B30100
+//氏名:伊藤悠馬
 package para;
 
 import java.util.Scanner;
@@ -11,15 +13,17 @@ import para.graphic.parser.*;
 import para.game.*;
 
 public class Game04 extends GameFrame{
-  TargetImageFilter inputside;
+  volatile TargetImageFilter inputside;
   final Target outputside;
   volatile Thread thread;
   InputStream istream;
+  OutputStream ostream;
   ShapeManager osm;
   ShapeManager ism;
   String serveraddress;
   static final int WIDTH=700;
   static final int HEIGHT=700;
+
   
   public Game04(){
     super(new JavaFXCanvasTarget(WIDTH, HEIGHT));
@@ -46,9 +50,10 @@ public class Game04 extends GameFrame{
       Socket socket;
       socket = new Socket(serveraddress, para.game.GameServerFrame.PORTNO);
       istream = socket.getInputStream();
-      OutputStream ostream = socket.getOutputStream();
+      ostream = socket.getOutputStream();
       inputside = new TargetImageFilter(new TextTarget(WIDTH, HEIGHT, ostream),
-                                        this, "imagefilter.cl", "Filter9" );
+                                        // this, "imagefilter.cl", "Filter9" );
+                                        this, "imagefilter.cl", "NoFilter" );
     }catch(IOException ex){
       System.err.print("To:"+serveraddress+" ");
       System.err.println(ex);
@@ -71,7 +76,7 @@ public class Game04 extends GameFrame{
             break;
           }
           if((lefton ==1 || righton ==1)){
-            x = x-4*lefton+4*righton;
+            x = x-15*lefton+15*righton;
             ism.put(new Rectangle(v+1, x,30*v+225,60,20,attr));
           }
           inputside.setParameter(gamerstate);
@@ -90,5 +95,17 @@ public class Game04 extends GameFrame{
         thread.interrupt();
       });
     thread2.start();
+  }
+
+
+  @Override
+  public void setCameraFilter(int filter_id){
+    if(filter_id == 100){
+      inputside = new TargetImageFilter(new TextTarget(WIDTH, HEIGHT, ostream),
+      this, "imagefilter.cl", "LoserFilter" );
+    }else{
+      inputside = new TargetImageFilter(new TextTarget(WIDTH, HEIGHT, ostream),
+      this, "imagefilter.cl", "Filter"+filter_id );
+    }
   }
 }

@@ -342,3 +342,48 @@ __kernel void Filter9(const int width, const int height,
   outb[oadd+2]= g;
   outb[oadd+3]= 255-g;
 }
+
+//filter for ex3
+__kernel void NoFilter(const int width, const int height, 
+                     __global const uchar* in, 
+                     __global uchar *outb,
+		     const float amp) {
+  // get index of global data array
+  int lx = get_global_id(0);
+  int ly = get_global_id(1);
+/*
+  // bound check (equivalent to the limit on a 'for' loop for standard/serial C code
+  if (lx > width || ly >height)  {
+    return;
+  }
+*/
+  int oadd = (ly*width+lx)*4;
+  int iadd = addr(width, height, lx+1, ly+1);
+  outb[oadd  ]= in[iadd];
+  outb[oadd+1]= in[iadd+1];
+  outb[oadd+2]= in[iadd+2];
+  outb[oadd+3]= 255;
+}
+
+//filter for ex3
+__kernel void LoserFilter(const int width, const int height, 
+                     __global const uchar* in, 
+                     __global uchar *outb,
+		     const float cx) {
+  // get index of global data array
+  int lx = get_global_id(0);
+  int ly = get_global_id(1);
+
+/*
+  // bound check (equivalent to the limit on a 'for' loop for standard/serial C code
+  if (lx > width || ly >height)  {
+    return;
+  }
+*/
+  int oadd = (ly*width+lx)*4;
+  int iadd = addr(width, height, lx+1, ly+1);
+  outb[oadd  ]= in[iadd];
+  outb[oadd+1]= 0;
+  outb[oadd+2]= 0;
+  outb[oadd+3]= 255;
+}

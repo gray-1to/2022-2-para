@@ -26,6 +26,9 @@ public class GameMainParser extends MainParser{
       case "gamer":
         gf.setGamerState(s.nextInt());
         break;
+      case "camera_change":
+        gf.setCameraFilter(s.nextInt());
+        break;
       }
     }
   }

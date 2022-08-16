@@ -113,6 +113,9 @@ public class GameFrame extends Application{
   void setGamerState(int state){
     this.gamerstate = state;
   }
+
+  public void setCameraFilter(int filter_id){
+  }
   
   /**
    * JavaFXアプリケーション・スレッドから呼び出されるメソッド.

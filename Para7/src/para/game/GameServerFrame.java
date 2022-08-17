@@ -53,7 +53,7 @@ public class GameServerFrame extends Thread{
   
   private void loop(){
     while(true){
-      System.out.println(users);
+      // System.out.println(users);
       Socket s;
       // synchronized(this){
       //   users++;
@@ -139,7 +139,7 @@ public class GameServerFrame extends Thread{
   }
 
   public synchronized void finish(int loser_id){
-    useroutput[loser_id].drawCameraFilter(100);
+    useroutput[loser_id].drawCameraFilter(100);//100番が敗北感用フィルター
     new Thread(()->{
       try{
         Thread.sleep(10000);

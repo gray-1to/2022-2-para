@@ -1,3 +1,5 @@
+//学籍番号：20B30100
+//氏名：伊藤悠馬
 package para;
 
 import java.io.IOException;
@@ -120,7 +122,7 @@ public class GameServer01{
         if(all_game_finish){
             int min_id = -1, min_score = 1000;
             for(int i=0;i<MAXCONNECTION;i++){
-              if(score[i] < min_score){
+              if(score[i] <= min_score){
                 min_score = score[i];
                 min_id = i;
               }

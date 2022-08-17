@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.List;
 import java.net.*;
 import java.io.*;
+import java.time.*;
 import para.graphic.target.*;
 import para.graphic.opencl.*;
 import para.graphic.shape.*;
@@ -46,6 +47,11 @@ public class Game04 extends GameFrame{
     if(thread != null){
       return;
     }
+
+    //for record
+    LocalDateTime nowDate = LocalDateTime.now();
+    TargetRecorder recodetarget = new TargetRecorder("battle_at_"+nowDate, outputside);
+
     try{
       Socket socket;
       socket = new Socket(serveraddress, para.game.GameServerFrame.PORTNO);
@@ -88,7 +94,7 @@ public class Game04 extends GameFrame{
     /* 受信したデータを画面に出力するスレッド */
     Thread thread2 = new Thread(()->{
       // System.out.println("2:"+Thread.currentThread().getName());// print 3-3
-        GameMainParser parser = new GameMainParser(this, outputside, osm);
+        GameMainParser parser = new GameMainParser(this, recodetarget, osm);
         BufferedReader br = new BufferedReader(new InputStreamReader(istream));
         parser.parse(new Scanner(istream));//loop
         System.out.println("connection closed");
